@@ -68,20 +68,15 @@ def get_plots(in_df, prefix='html'):
         if 'Expected' in in_df.columns:
             cond0 = in_df['Expected'] == 0.
             cond1 = in_df['Expected'] > 0.
+        elif c == 'RadarQualityIndex':
+            cond0 = in_df['Composite'] <= -99
+            cond1 = in_df['Composite'] > -99
         else:
             cond0 = in_df['RadarQualityIndex'] <= -99
             cond1 = in_df['RadarQualityIndex'] > -99
 
         a = v[cond0].values
-        try:
-            pl.hist(a, bins=xbins, histtype='step', log=False)
-        except ValueError as e:
-            print e
-            print c
-            print cond0
-            print cond1
-            print v
-            exit(0)
+        pl.hist(a, bins=xbins, histtype='step', log=False)
         pl.title(c)
 
         b = v[cond1].values
