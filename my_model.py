@@ -34,9 +34,7 @@ def create_submission_parallel(xtest, ytest):
         #ypred = model.predict(xtest)
         #print ypred
         yprob = model.predict_proba(xtest)
-        print yprob.shape
         ytest['Predicted%d' % idx] = yprob[:,1]
-        print ytest['Predicted%d' % idx]
 
     for idx in range(1,70):
         ytest['Predicted%d' % idx] = np.max(ytest[['Predicted%d' % idx-1, 'Predicted%d' % idx]], axis=1)
