@@ -73,7 +73,12 @@ def get_plots(in_df, prefix='html'):
             cond1 = in_df['RadarQualityIndex'] > -99
 
         a = v[cond0].values
-        pl.hist(a, bins=xbins, histtype='step', log=False)
+        try:
+            pl.hist(a, bins=xbins, histtype='step', log=False)
+        except ValueError as e:
+            print e
+            print c
+            exit(0)
         pl.title(c)
 
         b = v[cond1].values
