@@ -29,9 +29,29 @@ def create_html_page_of_plots(list_of_plots):
     htmlfile.write('</div></html></html>\n')
     htmlfile.close()
 
+BINMAP = {u'Idx': [0, 100, 50],
+          u'RadarId': [0,8,8],
+          u'TimeToEnd': [0,60,60],
+          u'DistanceToRadar': [0,100,100],
+          u'Composite': [-20,60,80],
+          u'HybridScan': [-20,80,100],
+          u'HydrometeorType': [0,14,14],
+          u'RR1': [-10,20,100],
+          u'RR2': [-10,30,100],
+          u'RR3': [-50,50,100],
+          u'RadarQualityIndex': [0,1,100],
+          u'Reflectivity': [-40,60,100],
+          u'ReflectivityQC': [-20,60,80],
+          u'RhoHV': [0,2,100],
+          u'Velocity': [-40,40,80],
+          u'Zdr': [-8,8,100],
+          u'LogWaterVolume': [-18,-2,100],
+          u'MassWeightedMean': [0,5,100],
+          u'MassWeightedSD': [0,2,100],
+          u'Expected': [0,70,70]}
+
 def get_plots(in_df):
     list_of_plots = []
-    #print in_df.columns
 
     for c in in_df.columns:
         if c in ['Id',]:
@@ -39,45 +59,65 @@ def get_plots(in_df):
         pl.clf()
         v = in_df[c][in_df[c].notnull()]
         nent = len(v)
+        if nent == 0:
+            continue
         hmin, hmax = v.min(), v.max()
-        xbins = np.linspace(hmin,hmax,nent)
-        a = v.values
-        try:
-            pl.hist(a, bins=xbins, histtype='step', log=False)
-        except ValueError:
-            print xbins, hmin, hmax, nent, v.dtype
-            print np.isnan(hmin), np.isnan(hmax)
-            exit(0)
-        except IndexError:
-            print xbins, hmin, hmax, nent, v.dtype
-            print np.isnan(hmin), np.isnan(hmax)
-            exit(0)
+        #xbins = np.linspace(hmin,hmax,nent//500)
+        hmin, hmax, nbin = BINMAP[c]
+        xbins = np.linspace(hmin,hmax,nbin)
+
+        cond0 = in_df['Expected'] == 0.
+        cond1 = in_df['Expected'] > 0.
+
+        #cond0 = in_df['RadarQualityIndex'].notnull()
+        #cond1 = in_df['RadarQualityIndex'].isnull()
+
+        a = v[cond0].values
+        pl.hist(a, bins=xbins, histtype='step', log=False)
         pl.title(c)
+
+        b = v[cond1].values
+        pl.hist(b, bins=xbins, histtype='step', log=False)
+
         pl.savefig('%s.png' % c)
         list_of_plots.append('%s.png' % c)
     create_html_page_of_plots(list_of_plots)
 
 def clean_data(indf):
     print 'call clean data'
-    
+
+    for c in ['RadarQualityIndex', 'Composite', 'HybridScan', 'RR1', 'RR2',
+              'RR3', 'Reflectivity', 'ReflectivityQC', 'RhoHV', 'Velocity',
+              'Zdr', 'LogWaterVolume', 'MassWeightedMean', 'MassWeightedSD']:
+        indf.loc[indf[c].isnull(), c] = -100
+
+    indf = indf.drop(labels=['Kdp'], axis=1)
     return indf
 
-def load_data(is_test=False):
-    fname = 'train_2013_avg.csv.gz'
+def load_data():
+    fname = 'train_2013_full.csv.gz'
     if is_test:
-        fname = 'test_2014_avg.csv.gz'
+        fname = 'test_2014_full.csv.gz'
 
-    df = pd.read_csv(fname, compression='gzip')
-    
-    df = clean_data(df)
-    
-    print df.columns
-    
-    #get_plots(df)
+    train_df = pd.read_csv('train_2013_full.csv.gz', compression='gzip')
+    test_df = pd.read_csv('test_2014_full.csv.gz', compression='gzip')
+    submit_df = pd.read_csv('sampleSubmission.csv.gz', compression='gzip')
 
-    print df['HydrometeorType']
-    
-    return
+    train_df = clean_data(train_df)
+    test_df = clean_data(test_df)
+
+    print train_df.columns
+
+    get_plots(train_df)
+
+    print train_df.shape
+
+    xtrain = train_df.drop(labels=['Id', 'Idx', 'Expected'], axis=1).values
+    ytrain = train_df['Expected'].values
+    xtest = test_df.drop(labels=['Id', 'Idx'], axis=1).values
+    ytest = submit_df
+
+    return xtrain, ytrain, xtest, ytest
 
 if __name__ == '__main__':
-    load_data()
+    xtrain, ytrain, xtest, ytest = load_data()
