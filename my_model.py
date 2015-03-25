@@ -43,17 +43,20 @@ if __name__ == '__main__':
     end_idx = -1
     for arg in os.sys.argv:
         try:
-            if begin_idx < 0:
-                begin_idx = int(arg)
-            else:
-                end_idx = int(arg)
-            break
+            index = int(arg)
+            if begin_idx == -1:
+                begin_idx = index
+            elif end_idx == -1:
+                end_idx = index
+                break
         except ValueError:
             continue
     if begin_idx == -1:
         begin_idx = 0
     if end_idx == -1:
         end_idx = 69
+        
+    print begin_idx, end_idx
 
     if begin_idx < 70:
         #model = SGDClassifier(loss='log', n_jobs=-1, penalty='l1', verbose=1, n_iter=200)
