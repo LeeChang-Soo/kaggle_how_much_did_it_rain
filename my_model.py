@@ -19,7 +19,7 @@ def score_model(model, xtrain, ytrain):
     model.fit(xTrain, yTrain)
     print model.score(xTest, yTest)
     
-    with gzip.open('model.pkl.gz' % index, 'wb') as mfile:
+    with gzip.open('model.pkl.gz', 'wb') as mfile:
         pickle.dump(model, mfile, protocol=2)
 
 if __name__ == '__main__':
