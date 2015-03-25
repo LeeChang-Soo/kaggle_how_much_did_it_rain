@@ -13,7 +13,7 @@ import pandas as pd
 def create_html_page_of_plots(list_of_plots, prefix='html'):
     if not os.path.exists(prefix):
         os.makedirs(prefix)
-    os.system('mv *.png html')
+    os.system('mv *.png %s' % prefix)
     #print(list_of_plots)
     idx = 0
     htmlfile = open('%s/index_0.html' % prefix, 'w')
