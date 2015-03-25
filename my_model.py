@@ -38,5 +38,5 @@ if __name__ == '__main__':
     #model = RandomForestRegressor(n_estimators=10, n_jobs=-1, verbose=1)
     #model = GradientBoostingRegressor(loss='lad', verbose=1)
     
-    score_model_parallel(model, xtrain, ytrain, yvalue=5)
+    score_model_parallel(model, xtrain, ytrain, yvalue=10)
     #create_submission(xtest, ytest)
