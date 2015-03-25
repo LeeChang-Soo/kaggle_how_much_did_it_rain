@@ -94,7 +94,7 @@ def clean_data(indf):
     indf = indf.drop(labels=['Kdp'], axis=1)
     return indf
 
-def load_data():
+def load_data(do_plots=False):
     train_df = pd.read_csv('train_2013_full.csv.gz', compression='gzip')
     test_df = pd.read_csv('test_2014_full.csv.gz', compression='gzip')
     submit_df = pd.read_csv('sampleSubmission.csv.gz', compression='gzip')
@@ -104,8 +104,9 @@ def load_data():
 
     print train_df.columns
 
-    get_plots(train_df, prefix='html_train')
-    get_plots(test_df, prefix='html_test')
+    if do_plots:
+        get_plots(train_df, prefix='html_train')
+        get_plots(test_df, prefix='html_test')
 
     print train_df.shape
 
@@ -119,4 +120,4 @@ def load_data():
     return xtrain, ytrain, xtest, ytest
 
 if __name__ == '__main__':
-    xtrain, ytrain, xtest, ytest = load_data()
+    xtrain, ytrain, xtest, ytest = load_data(do_plots=True)
