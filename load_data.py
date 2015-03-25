@@ -65,22 +65,23 @@ def get_plots(in_df, prefix='html'):
         hmin, hmax, nbin = BINMAP[c]
         xbins = np.linspace(hmin,hmax,nbin)
 
-        if 'Expected' in in_df.columns:
-            cond0 = in_df['Expected'] == 0.
-            cond1 = in_df['Expected'] > 0.
-        elif c == 'RadarQualityIndex':
-            cond0 = in_df['Composite'] <= -99
-            cond1 = in_df['Composite'] > -99
-        else:
-            cond0 = in_df['RadarQualityIndex'] <= -99
-            cond1 = in_df['RadarQualityIndex'] > -99
+        #if 'Expected' in in_df.columns:
+            #cond0 = in_df['Expected'] == 0.
+            #cond1 = in_df['Expected'] > 0.
+        #elif c == 'RadarQualityIndex':
+            #cond0 = in_df['Composite'] <= -99
+            #cond1 = in_df['Composite'] > -99
+        #else:
+            #cond0 = in_df['RadarQualityIndex'] <= -99
+            #cond1 = in_df['RadarQualityIndex'] > -99
 
-        a = v[cond0].values
+        a = v.values
+        #a = v[cond0].values
         pl.hist(a, bins=xbins, histtype='step', log=False)
         pl.title(c)
 
-        b = v[cond1].values
-        pl.hist(b, bins=xbins, histtype='step', log=False)
+        #b = v[cond1].values
+        #pl.hist(b, bins=xbins, histtype='step', log=False)
 
         pl.savefig('%s.png' % c)
         list_of_plots.append('%s.png' % c)
