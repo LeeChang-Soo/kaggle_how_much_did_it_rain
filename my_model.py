@@ -28,13 +28,20 @@ def score_model_parallel(model, xtrain, ytrain, yvalue=0):
 def create_submission_parallel(xtest, ytest):
     model = None
     for idx in range(0,70):
-        with gzip.open('model_%d.pkl.gz' % yvalue, 'rb') as mfile:
+        with gzip.open('model_%d.pkl.gz' % idx, 'rb') as mfile:
             model = pickle.load(mfile)
         
-        ypred = model.predict(xtest)
+        #ypred = model.predict(xtest)
+        #print ypred
         yprob = model.predict_proba(xtest)
-        print ypred
-        print yprob
+        print yprob.shape
+        ytest['Predicted%d' % idx] = yprob[:,1]
+        print ytest['Predicted%d' % idx]
+
+    for idx in range(1,70):
+        ytest['Predicted%d' % idx] = np.max(ytest[['Predicted%d' % idx-1, 'Predicted%d' % idx]], axis=1)
+    
+    ytest.to_csv('submission.csv.gz', compression='gzip', index=False)
 
 if __name__ == '__main__':
     xtrain, ytrain, xtest, ytest = load_data()
