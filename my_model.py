@@ -13,7 +13,7 @@ from load_data import load_data
 def score_model(model, xtrain, ytrain):
     randint = reduce(lambda x,y: x|y, [ord(x)<<(n*8) for (n,x) in enumerate(os.urandom(4))])
     xTrain, xTest, yTrain, yTest = train_test_split(xtrain, ytrain,
-                                                    test_size=0.4,
+                                                    test_size=0.6,
                                                     random_state=randint)
     model.fit(xTrain, yTrain)
     print model.score(xTest, yTest)
@@ -24,6 +24,6 @@ def score_model(model, xtrain, ytrain):
 if __name__ == '__main__':
     xtrain, ytrain, xtest, ytest = load_data()
 
-    model = RandomForestRegressor(n_estimators=400, n_jobs=-1, verbose=1)
+    model = RandomForestRegressor(n_estimators=10, n_jobs=-1, verbose=1)
     
     score_model(model, xtrain, ytrain)
