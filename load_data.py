@@ -78,6 +78,9 @@ def get_plots(in_df, prefix='html'):
         except ValueError as e:
             print e
             print c
+            print cond0
+            print cond1
+            print v
             exit(0)
         pl.title(c)
 
