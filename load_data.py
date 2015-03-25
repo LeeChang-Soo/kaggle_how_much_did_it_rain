@@ -95,10 +95,6 @@ def clean_data(indf):
     return indf
 
 def load_data():
-    fname = 'train_2013_full.csv.gz'
-    if is_test:
-        fname = 'test_2014_full.csv.gz'
-
     train_df = pd.read_csv('train_2013_full.csv.gz', compression='gzip')
     test_df = pd.read_csv('test_2014_full.csv.gz', compression='gzip')
     submit_df = pd.read_csv('sampleSubmission.csv.gz', compression='gzip')
@@ -116,6 +112,8 @@ def load_data():
     ytrain = train_df['Expected'].values
     xtest = test_df.drop(labels=['Id', 'Idx'], axis=1).values
     ytest = submit_df
+
+    print xtrain.shape, ytrain.shape, xtest.shape, ytest.shape
 
     return xtrain, ytrain, xtest, ytest
 
