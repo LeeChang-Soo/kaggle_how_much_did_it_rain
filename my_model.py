@@ -14,7 +14,7 @@ from load_data import load_data
 
 def score_model_parallel(model, xtrain, ytrain, yvalue=0):
     randint = reduce(lambda x,y: x|y, [ord(x)<<(n*8) for (n,x) in enumerate(os.urandom(4))])
-    xTrain, xTest, yTrain, yTest = train_test_split(xtrain, (ytrain < yvalue).astype(int),
+    xTrain, xTest, yTrain, yTest = train_test_split(xtrain, (ytrain <= yvalue).astype(int),
                                                     test_size=0.4,
                                                     random_state=randint)
     model.fit(xTrain, yTrain)
