@@ -5,4 +5,4 @@ import os
 from load_data import load_data
 
 if __name__ == '__main__':
-    load_data()
+    xtrain, ytrain, xtest, ytest = load_data()
