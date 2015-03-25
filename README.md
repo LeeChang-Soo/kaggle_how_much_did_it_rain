@@ -1,0 +1,1 @@
+Code for kaggle competition to predict rainfall from radar readings see http://www.kaggle.com/c/how-much-did-it-rain
