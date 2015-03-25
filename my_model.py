@@ -36,4 +36,5 @@ if __name__ == '__main__':
     model = RandomForestRegressor(n_estimators=10, n_jobs=-1, verbose=1)
     #model = GradientBoostingRegressor(loss='lad', verbose=1)
     
-    score_model(model, xtrain, ytrain)
+    #score_model(model, xtrain, ytrain)
+    create_submission(xtest, ytest)
