@@ -29,7 +29,9 @@ def create_submission_parallel(xtest, ytest, yvalue=0):
         model = pickle.load(mfile)
     
     ypred = model.predict(xtest)
+    yprob = model.predict_proba(xtest)
     print ypred
+    print yprob
 
 if __name__ == '__main__':
     xtrain, ytrain, xtest, ytest = load_data()
