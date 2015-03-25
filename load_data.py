@@ -10,27 +10,26 @@ import pylab as pl
 import numpy as np
 import pandas as pd
 
-def create_html_page_of_plots(list_of_plots):
-    if not os.path.exists('html'):
-        os.makedirs('html')
+def create_html_page_of_plots(list_of_plots, prefix='html'):
+    if not os.path.exists(prefix):
+        os.makedirs(prefix)
     os.system('mv *.png html')
     #print(list_of_plots)
     idx = 0
-    htmlfile = open('html/index_0.html', 'w')
+    htmlfile = open('%s/index_0.html' % prefix, 'w')
     htmlfile.write('<!DOCTYPE html><html><body><div>\n')
     for plot in list_of_plots:
         if idx > 0 and idx % 200 == 0:
             htmlfile.write('</div></html></html>\n')
             htmlfile.close()
-            htmlfile = open('html/index_%d.html' % (idx//200), 'w')
+            htmlfile = open('%s/index_%d.html' % (prefix, (idx//200)), 'w')
             htmlfile.write('<!DOCTYPE html><html><body><div>\n')
         htmlfile.write('<p><img src="%s"></p>\n' % plot)
         idx += 1
     htmlfile.write('</div></html></html>\n')
     htmlfile.close()
 
-BINMAP = {u'Idx': [0, 100, 50],
-          u'RadarId': [0,8,8],
+BINMAP = {u'Nradar': [0,8,8],
           u'TimeToEnd': [0,60,60],
           u'DistanceToRadar': [0,100,100],
           u'Composite': [-20,60,80],
@@ -50,7 +49,7 @@ BINMAP = {u'Idx': [0, 100, 50],
           u'MassWeightedSD': [0,2,100],
           u'Expected': [0,70,70]}
 
-def get_plots(in_df):
+def get_plots(in_df, prefix='html'):
     list_of_plots = []
 
     for c in in_df.columns:
@@ -81,7 +80,7 @@ def get_plots(in_df):
 
         pl.savefig('%s.png' % c)
         list_of_plots.append('%s.png' % c)
-    create_html_page_of_plots(list_of_plots)
+    create_html_page_of_plots(list_of_plots, prefix=prefix)
 
 def clean_data(indf):
     print 'call clean data'
@@ -104,13 +103,14 @@ def load_data():
 
     print train_df.columns
 
-    get_plots(train_df)
+    get_plots(train_df, prefix='html_train')
+    get_plots(test_df, prefix='html_test')
 
     print train_df.shape
 
-    xtrain = train_df.drop(labels=['Id', 'Idx', 'Expected'], axis=1).values
+    xtrain = train_df.drop(labels=['Id', 'Expected'], axis=1).values
     ytrain = train_df['Expected'].values
-    xtest = test_df.drop(labels=['Id', 'Idx'], axis=1).values
+    xtest = test_df.drop(labels=['Id',], axis=1).values
     ytest = submit_df
 
     print xtrain.shape, ytrain.shape, xtest.shape, ytest.shape
