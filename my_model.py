@@ -38,11 +38,29 @@ def create_submission_parallel(xtest, ytest, yvalue=0):
 if __name__ == '__main__':
     xtrain, ytrain, xtest, ytest = load_data()
 
-    #model = SGDClassifier(loss='log', n_jobs=-1, penalty='l1', verbose=1, n_iter=200)
-    model = GradientBoostingClassifier(loss='deviance', verbose=1)
-    #model = RandomForestClassifier(n_estimators=10, n_jobs=-1, verbose=1)
-    #model = RandomForestRegressor(n_estimators=10, n_jobs=-1, verbose=1)
-    #model = GradientBoostingRegressor(loss='lad', verbose=1)
-    
-    score_model_parallel(model, xtrain, ytrain, yvalue=int(os.sys.argv[1]))
-    #create_submission_parallel(xtest, ytest, yvalue=int(os.sys.argv[1]))
+    begin_idx = -1
+    end_idx = -1
+    for arg in os.sys.argv:
+        try:
+            if begin_idx < 0:
+                begin_idx = int(arg)
+            else:
+                end_idx = int(arg)
+            break
+        except ValueError:
+            continue
+    if begin_idx == -1:
+        begin_idx = 0
+    if end_idx == -1:
+        end_idx = 69
+
+    if begin_idx < 70:
+        #model = SGDClassifier(loss='log', n_jobs=-1, penalty='l1', verbose=1, n_iter=200)
+        #model = GradientBoostingClassifier(loss='deviance', verbose=1)
+        model = RandomForestClassifier(n_estimators=10, n_jobs=-1, verbose=1)
+        
+        
+        for idx in range(begin_idx, end_idx+1):
+            score_model_parallel(model, xtrain, ytrain, yvalue=int(os.sys.argv[1]))
+    elif begin_idx == 70:
+        #create_submission_parallel(xtest, ytest, yvalue=int(os.sys.argv[1]))
