@@ -26,6 +26,6 @@ if __name__ == '__main__':
     xtrain, ytrain, xtest, ytest = load_data()
 
     #model = RandomForestRegressor(n_estimators=10, n_jobs=-1, verbose=1)
-    model = GradientBoostingRegressor(loss='lad', verbose=1, n_jobs=-1)
+    model = GradientBoostingRegressor(loss='lad', verbose=1)
     
     score_model(model, xtrain, ytrain)
