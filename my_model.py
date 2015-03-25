@@ -39,7 +39,7 @@ def create_submission_parallel(xtest, ytest):
         ytest['Predicted%d' % idx] = yprob[:,1]
 
     for idx in range(1,70):
-        ytest['Predicted%d' % idx] = np.max(ytest[['Predicted%d' % idx-1, 'Predicted%d' % idx]], axis=1)
+        ytest['Predicted%d' % idx] = np.max(ytest[['Predicted%d' % (idx-1), 'Predicted%d' % idx]], axis=1)
     
     ytest.to_csv('submission.csv.gz', compression='gzip', index=False)
 
