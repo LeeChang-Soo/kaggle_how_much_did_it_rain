@@ -22,6 +22,14 @@ def score_model(model, xtrain, ytrain):
     with gzip.open('model.pkl.gz', 'wb') as mfile:
         pickle.dump(model, mfile, protocol=2)
 
+def create_submission(xtest, ytest):
+    model = None
+    with gzip.open('model.pkl.gz', 'rb') as mfile:
+        model = pickle.load(mfile)
+    
+    ypred = model.predict(xtest)
+    print ypred
+
 if __name__ == '__main__':
     xtrain, ytrain, xtest, ytest = load_data()
 
