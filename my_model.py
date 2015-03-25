@@ -23,7 +23,7 @@ def score_model_parallel(model, xtrain, ytrain, yvalue=0):
     with gzip.open('model_%d.pkl.gz' % yvalue, 'wb') as mfile:
         pickle.dump(model, mfile, protocol=2)
 
-def create_submission(xtest, ytest, yvalue=0):
+def create_submission_parallel(xtest, ytest, yvalue=0):
     model = None
     with gzip.open('model_%d.pkl.gz' % yvalue, 'rb') as mfile:
         model = pickle.load(mfile)
@@ -38,5 +38,5 @@ if __name__ == '__main__':
     #model = RandomForestRegressor(n_estimators=10, n_jobs=-1, verbose=1)
     #model = GradientBoostingRegressor(loss='lad', verbose=1)
     
-    score_model_parallel(model, xtrain, ytrain, yvalue=int(os.sys.argv[1]))
-    #create_submission(xtest, ytest)
+    #score_model_parallel(model, xtrain, ytrain, yvalue=int(os.sys.argv[1]))
+    create_submission_parallel(xtest, ytest, yvalue=int(os.sys.argv[1]))
