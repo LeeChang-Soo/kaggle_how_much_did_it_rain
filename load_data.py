@@ -65,11 +65,12 @@ def get_plots(in_df, prefix='html'):
         hmin, hmax, nbin = BINMAP[c]
         xbins = np.linspace(hmin,hmax,nbin)
 
-        cond0 = in_df['Expected'] == 0.
-        cond1 = in_df['Expected'] > 0.
-
-        #cond0 = in_df['RadarQualityIndex'].notnull()
-        #cond1 = in_df['RadarQualityIndex'].isnull()
+        if 'Expected' in in_df.columns:
+            cond0 = in_df['Expected'] == 0.
+            cond1 = in_df['Expected'] > 0.
+        else:
+            cond0 = in_df['RadarQualityIndex'] <= -99
+            cond1 = in_df['RadarQualityIndex'] > -99
 
         a = v[cond0].values
         pl.hist(a, bins=xbins, histtype='step', log=False)
