@@ -36,7 +36,7 @@ def create_submission_parallel(xtest, ytest):
         #ypred = model.predict(xtest)
         #print ypred
         yprob = model.predict_proba(xtest)
-        print yprob.shape
+        print yprob
         ytest['Predicted%d' % idx] = yprob[:,1]
 
     for idx in range(1,70):
