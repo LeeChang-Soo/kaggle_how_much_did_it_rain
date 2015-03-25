@@ -25,15 +25,16 @@ def score_model_parallel(model, xtrain, ytrain, yvalue=0):
     with gzip.open('model_%d.pkl.gz' % yvalue, 'wb') as mfile:
         pickle.dump(model, mfile, protocol=2)
 
-def create_submission_parallel(xtest, ytest, yvalue=0):
+def create_submission_parallel(xtest, ytest):
     model = None
-    with gzip.open('model_%d.pkl.gz' % yvalue, 'rb') as mfile:
-        model = pickle.load(mfile)
-    
-    ypred = model.predict(xtest)
-    yprob = model.predict_proba(xtest)
-    print ypred
-    print yprob
+    for idx in range(0,70):
+        with gzip.open('model_%d.pkl.gz' % yvalue, 'rb') as mfile:
+            model = pickle.load(mfile)
+        
+        ypred = model.predict(xtest)
+        yprob = model.predict_proba(xtest)
+        print ypred
+        print yprob
 
 if __name__ == '__main__':
     xtrain, ytrain, xtest, ytest = load_data()
@@ -61,6 +62,6 @@ if __name__ == '__main__':
         
         
         for idx in range(begin_idx, end_idx+1):
-            score_model_parallel(model, xtrain, ytrain, yvalue=int(os.sys.argv[1]))
+            score_model_parallel(model, xtrain, ytrain, yvalue=idx)
     elif begin_idx == 70:
-        #create_submission_parallel(xtest, ytest, yvalue=int(os.sys.argv[1]))
+        create_submission_parallel(xtest, ytest)
