@@ -30,7 +30,7 @@ def count_distances(x):
         arr.append(numb)
     return np.array(arr)
 
-def split_csv(is_test=False, number_of_files=1):
+def split_csv(is_test=False, number_of_files=1, number_of_events=-1):
     orig_csv_file = 'train_2013.csv.gz'
     output_prefix = 'train_2013_full'
     if is_test:
@@ -53,7 +53,7 @@ def split_csv(is_test=False, number_of_files=1):
         for c in csv_writers:
             c.writerow(labels_to_write)
         for idx, row in enumerate(csv_reader):
-            if idx == 100000:
+            if number_of_events > 0 and idx > number_of_events:
                 break
             row_dict = dict(zip(labels, row))
 
