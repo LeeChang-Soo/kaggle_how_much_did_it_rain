@@ -7,7 +7,7 @@ import cPickle as pickle
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.linear_model import SGDClassifier
 
 from sklearn.cross_validation import train_test_split
@@ -38,7 +38,8 @@ def create_submission_parallel(xtest, ytest, yvalue=0):
 if __name__ == '__main__':
     xtrain, ytrain, xtest, ytest = load_data()
 
-    model = SGDClassifier(loss='log', n_jobs=-1, penalty='l1', verbose=1, n_iter=200)
+    #model = SGDClassifier(loss='log', n_jobs=-1, penalty='l1', verbose=1, n_iter=200)
+    model = GradientBoostingClassifier(loss='deviance', verbose=1)
     #model = RandomForestClassifier(n_estimators=10, n_jobs=-1, verbose=1)
     #model = RandomForestRegressor(n_estimators=10, n_jobs=-1, verbose=1)
     #model = GradientBoostingRegressor(loss='lad', verbose=1)
