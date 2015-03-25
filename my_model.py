@@ -5,6 +5,8 @@ import gzip
 
 import cPickle as pickle
 
+import numpy as np
+
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import GradientBoostingClassifier
