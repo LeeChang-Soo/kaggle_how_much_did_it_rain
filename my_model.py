@@ -23,7 +23,7 @@ def score_model_parallel(model, xtrain, ytrain, yvalue=0):
                                                     random_state=randint)
     model.fit(xTrain, yTrain)
     print model.score(xTest, yTest)
-    
+
     with gzip.open('model_%d.pkl.gz' % yvalue, 'wb') as mfile:
         pickle.dump(model, mfile, protocol=2)
 
@@ -32,7 +32,7 @@ def create_submission_parallel(xtest, ytest):
     for idx in range(0,70):
         with gzip.open('model_%d.pkl.gz' % idx, 'rb') as mfile:
             model = pickle.load(mfile)
-        
+
         #ypred = model.predict(xtest)
         #print ypred
         yprob = model.predict_proba(xtest)
@@ -41,7 +41,7 @@ def create_submission_parallel(xtest, ytest):
 
     for idx in range(1,70):
         ytest['Predicted%d' % idx] = np.max(ytest[['Predicted%d' % (idx-1), 'Predicted%d' % idx]], axis=1)
-    
+
     ytest.to_csv('submission.csv.gz', compression='gzip', index=False)
 
 if __name__ == '__main__':
@@ -63,15 +63,15 @@ if __name__ == '__main__':
         begin_idx = 0
     if end_idx == -1:
         end_idx = 69
-        
+
     print begin_idx, end_idx
 
     if begin_idx < 70:
         #model = SGDClassifier(loss='log', n_jobs=-1, penalty='l1', verbose=1, n_iter=200)
         #model = GradientBoostingClassifier(loss='deviance', verbose=1)
         model = RandomForestClassifier(n_estimators=10, n_jobs=-1, verbose=1)
-        
-        
+
+
         for idx in range(begin_idx, end_idx+1):
             score_model_parallel(model, xtrain, ytrain, yvalue=idx)
     elif begin_idx == 70:
