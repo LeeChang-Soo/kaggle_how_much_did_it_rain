@@ -92,7 +92,7 @@ if __name__ == '__main__':
     if begin_idx < 70:
         #model = SGDClassifier(loss='log', n_jobs=-1, penalty='l1', verbose=1, n_iter=200)
         model = GradientBoostingClassifier(loss='deviance', verbose=1, 
-                                           n_estimators=10, max_depth=10)
+                                           n_estimators=10, max_depth=5)
 #        model = RandomForestClassifier(n_estimators=10, n_jobs=-1, verbose=1)
 
 
