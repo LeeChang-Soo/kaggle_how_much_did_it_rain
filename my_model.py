@@ -43,6 +43,8 @@ def score_model_parallel(model, xtrain, ytrain, yvalue=0, do_grid_search=False):
     ypred = model.predict_proba(xTest)
     print 'score:', model.score(xTest, yTest)
     print 'MSE:', mean_squared_error(yTest, ypred[:, 1])
+    if hasattr(model, 'best_params_'):
+        print(model.best_params_)
 
     with gzip.open('model_%d.pkl.gz' % yvalue, 'wb') as mfile:
         pickle.dump(model, mfile, protocol=2)

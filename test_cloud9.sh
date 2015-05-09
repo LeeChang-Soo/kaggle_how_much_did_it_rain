@@ -7,6 +7,7 @@ rm how_much_did_it_rain.tar.gz
 # ./split_csv.py > output.out 2> output.err ### do this beforehand...
 # ./load_data.py > output.out 2> output.err 
 ./my_model.py 0 69 > output.out 2> output.err
+./my_model.py $(($1*10)) $(($1*10+9)) > output.out 2> output.err
 
 # D=`date +%Y%m%d%H%M%S`
 # tar zcvf output_${D}.tar.gz model.pkl.gz output.out output.err
