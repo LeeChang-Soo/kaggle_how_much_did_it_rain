@@ -12,17 +12,23 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.linear_model import SGDClassifier
 
+from sklearn.metrics import mean_squared_error
+
 from sklearn.grid_search import GridSearchCV
 
 from sklearn.cross_validation import train_test_split
 
 from load_data import load_data
 
+def scorer(estimator, X, y):
+    ypred = estimator.predict_proba(X)
+    return 1.0/mean_squared_error(y, ypred[:, 1])
+
 def score_model_parallel(model, xtrain, ytrain, yvalue=0, do_grid_search=False):
-    randint = reduce(lambda x,y: x|y, [ord(x)<<(n*8) for (n,x) in enumerate(os.urandom(4))])
-    xTrain, xTest, yTrain, yTest = train_test_split(xtrain, (ytrain <= yvalue).astype(int),
-                                                    test_size=0.4,
-                                                    random_state=randint)
+    xTrain, xTest, yTrain, yTest = train_test_split(xtrain,
+                                                    (ytrain <= yvalue)\
+                                                        .astype(int),
+                                                    test_size=0.4)
     n_est = [10, 20]
     m_dep = [2, 3, 4, 5, 6, 7, 10]
 
@@ -34,7 +40,9 @@ def score_model_parallel(model, xtrain, ytrain, yvalue=0, do_grid_search=False):
                                     n_jobs=-1, verbose=1)
 
     model.fit(xTrain, yTrain)
-    print model.score(xTest, yTest)
+    ypred = model.predict_proba(xTest)
+    print 'score:', model.score(xTest, yTest)
+    print 'MSE:', mean_squared_error(yTest, ypred[:, 1])
 
     with gzip.open('model_%d.pkl.gz' % yvalue, 'wb') as mfile:
         pickle.dump(model, mfile, protocol=2)
@@ -52,7 +60,8 @@ def create_submission_parallel(xtest, ytest):
         ytest['Predicted%d' % idx] = yprob[:,1]
 
     for idx in range(1,70):
-        ytest['Predicted%d' % idx] = np.max(ytest[['Predicted%d' % (idx-1), 'Predicted%d' % idx]], axis=1)
+        ytest['Predicted%d' % idx] = np.max(ytest[['Predicted%d' % (idx-1),
+                                            'Predicted%d' % idx]], axis=1)
 
     ytest.to_csv('submission.csv.gz', compression='gzip', index=False)
 
