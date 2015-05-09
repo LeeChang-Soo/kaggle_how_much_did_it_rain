@@ -29,7 +29,7 @@ def score_model_parallel(model, xtrain, ytrain, yvalue=0, do_grid_search=False):
                                                     (ytrain <= yvalue)\
                                                         .astype(int),
                                                     test_size=0.4)
-    n_est = [10, 20]
+    n_est = [5, 10, 20]
     m_dep = [5, 10, 20]
 
     if do_grid_search:
