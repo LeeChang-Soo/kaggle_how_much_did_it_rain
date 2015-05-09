@@ -98,6 +98,6 @@ if __name__ == '__main__':
 
         for idx in range(begin_idx, end_idx+1):
             score_model_parallel(model, xtrain, ytrain, yvalue=idx,
-                                 do_grid_search=True)
+                                 do_grid_search=False)
     elif begin_idx == 70:
         create_submission_parallel(xtest, ytest)
