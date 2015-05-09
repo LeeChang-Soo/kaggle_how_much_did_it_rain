@@ -30,7 +30,7 @@ def score_model_parallel(model, xtrain, ytrain, yvalue=0, do_grid_search=False):
                                                         .astype(int),
                                                     test_size=0.4)
     n_est = [10, 20]
-    m_dep = [2, 3, 4, 5, 6, 7, 10]
+    m_dep = [5, 10, 20]
 
     if do_grid_search:
         model = GridSearchCV(estimator=model,
@@ -91,13 +91,12 @@ if __name__ == '__main__':
 
     if begin_idx < 70:
         #model = SGDClassifier(loss='log', n_jobs=-1, penalty='l1', verbose=1, n_iter=200)
-        model = GradientBoostingClassifier(loss='deviance', verbose=1, 
-                                           n_estimators=10, max_depth=5)
+        model = GradientBoostingClassifier(loss='deviance', verbose=1)
 #        model = RandomForestClassifier(n_estimators=10, n_jobs=-1, verbose=1)
 
 
         for idx in range(begin_idx, end_idx+1):
             score_model_parallel(model, xtrain, ytrain, yvalue=idx,
-                                 do_grid_search=False)
+                                 do_grid_search=True)
     elif begin_idx == 70:
         create_submission_parallel(xtest, ytest)
