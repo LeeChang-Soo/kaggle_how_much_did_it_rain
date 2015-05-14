@@ -55,17 +55,15 @@ def create_submission_parallel(xtest, ytest):
         with gzip.open('model_%d.pkl.gz' % idx, 'rb') as mfile:
             model = pickle.load(mfile)
 
-        #ypred = model.predict(xtest)
-        #print ypred
+        print('model %d' % idx)
         yprob = model.predict_proba(xtest)
-        print yprob
         ytest['Predicted%d' % idx] = yprob[:,1]
 
     for idx in range(1,70):
         ytest['Predicted%d' % idx] = np.max(ytest[['Predicted%d' % (idx-1),
                                             'Predicted%d' % idx]], axis=1)
 
-    ytest.to_csv('submission.csv.gz', compression='gzip', index=False)
+    ytest.to_csv('submission.csv', index=False, float_format='%0.4f')
 
 if __name__ == '__main__':
     xtrain, ytrain, xtest, ytest = load_data()
